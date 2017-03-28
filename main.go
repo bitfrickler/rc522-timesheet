@@ -36,7 +36,8 @@ func log(msg string) {
 	//TODO: Write log file
 }
 
-func saveRemote(apiKey string, cardID string, deviceID string) (error) {
+// SaveRemote sends a timesheet entry to the remote JSON API
+func SaveRemote(apiKey string, cardID string, deviceID string) (error) {
 	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
