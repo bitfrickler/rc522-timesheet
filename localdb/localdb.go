@@ -32,9 +32,11 @@ func main() {
 	fmt.Println("Got signal:", s)
 
 	te := TimeEntry{TimeStamp: time.Now(), CardID: "mycard123", DeviceID: "myhostname123"}
-
 	SaveLocal(te)
+}
 
+// StartTicker starts the ticker for recurring data export to the remote JSON API
+func StartTicker() {
 	ticker := time.NewTicker(time.Second * 60)
 	go func() {
 		for _ = range ticker.C {
@@ -69,7 +71,6 @@ func transferLocal() {
 	}
 
 	rows.Close()
-
 }
 
 func checkErr(err error) {
