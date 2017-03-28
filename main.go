@@ -36,11 +36,13 @@ func log(msg string) {
 	//TODO: Write log file
 }
 
-func saveRemote(apiKey string, cardID string, deviceID string) {
+func saveRemote(apiKey string, cardID string, deviceID string) (error) {
 	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
-	_, err = http.Post(APIURL, "application/json;charset=utf-8", b)
+	_, err := http.Post(APIURL, "application/json;charset=utf-8", b)
+
+	return err
 }
 
 func main() {
@@ -70,7 +72,7 @@ func main() {
 				log("card id: " + id)
 
 				te := localdb.TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: DeviceID}
-				err := localdb.SaveLocal(new(localdb.TimeEntry))
+				err := localdb.SaveLocal(te)
 
 				if err != nil {
 					log(err.Error())
