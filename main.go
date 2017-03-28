@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 	"time"
-	
+
 	rfid "github.com/firmom/go-rfid-rc522/rfid"
 	rc522 "github.com/firmom/go-rfid-rc522/rfid/rc522"
 	rpio "github.com/stianeikeland/go-rpio"
@@ -23,11 +23,11 @@ type JSONTimeEntry struct {
 }
 
 var (
-	DeviceID, _ := os.Hostname()
-	APIURL     	= "http://10.0.26.106:8000/api/Time"
-	APIKey     	= "apikey123#"
-	led_pin    	= rpio.Pin(16)
-	buzzer_pin 	= rpio.Pin(18)
+	DeviceID, _ = os.Hostname()
+	APIURL      = "http://10.0.26.106:8000/api/Time"
+	APIKey      = "apikey123#"
+	led_pin     = rpio.Pin(16)
+	buzzer_pin  = rpio.Pin(18)
 )
 
 func log(msg string) {
@@ -69,15 +69,14 @@ func main() {
 			if id != oldvalue {
 				log("card id: " + id)
 
-				te := localdb.TimeEntry { TimeStamp: time.Now(), CardID: id, }
-				err := localdb.SaveLocal(new(localdb.TimeEntry)
+				te := localdb.TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: DeviceID}
+				err := localdb.SaveLocal(new(localdb.TimeEntry))
 
 				if err != nil {
 					log(err.Error())
 
 					notifyError()
-				}
-				else {
+				} else {
 					notify_success()
 				}
 
@@ -97,9 +96,6 @@ func main() {
 
 				time.Sleep(500 * time.Millisecond)
 			}
-
-		default:
-
 		}
 	}
 }
