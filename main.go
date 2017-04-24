@@ -1,26 +1,16 @@
 package main
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
-	"net/http"
 	"os"
+	"os/signal"
 	"time"
 
 	rfid "github.com/firmom/go-rfid-rc522/rfid"
 	rc522 "github.com/firmom/go-rfid-rc522/rfid/rc522"
 	rpio "github.com/stianeikeland/go-rpio"
-
-	localdb "github.com/bitfrickler/rc522-timesheet/localdb"
+	// localdb "github.com/bitfrickler/rc522-timesheet/localdb"
 )
-
-// JSONTimeEntry struct for time entry to be logged
-type JSONTimeEntry struct {
-	APIKey   string
-	CardID   string
-	DeviceID string
-}
 
 var (
 	DeviceID, _ = os.Hostname()
@@ -30,25 +20,25 @@ var (
 	buzzer_pin  = rpio.Pin(18)
 )
 
-func log(msg string) {
+func Log(msg string) {
 	fmt.Println(msg)
 
 	//TODO: Write log file
 }
 
-// SaveRemote sends a timesheet entry to the remote JSON API
-func SaveRemote(apiKey string, cardID string, deviceID string) (error) {
-	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID}
-	b := new(bytes.Buffer)
-	json.NewEncoder(b).Encode(j)
-	_, err := http.Post(APIURL, "application/json;charset=utf-8", b)
-
-	return err
-}
-
 func main() {
 
+	// Set up channel on which to send signal notifications.
+	// We must use a buffered channel or risk missing the signal
+	// if we're not ready to receive when the signal is sent.
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	s := <-c
+	fmt.Println("terminating:", s)
+
 	reset()
+
+	StartTicker()
 
 	var oldvalue string
 
@@ -70,17 +60,17 @@ func main() {
 		select {
 		case id := <-rfidChan:
 			if id != oldvalue {
-				log("card id: " + id)
+				Log("card id: " + id)
 
-				te := localdb.TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: DeviceID}
-				err := localdb.SaveLocal(te)
+				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: DeviceID}
+				err := saveLocal(te)
 
 				if err != nil {
-					log(err.Error())
-
 					notifyError()
+					Log(err.Error())
 				} else {
-					notify_success()
+					notifySuccess()
+					Log("committed to local database")
 				}
 
 				oldvalue = id
@@ -89,7 +79,7 @@ func main() {
 				go func() {
 					for _ = range ticker.C {
 						if oldvalue != "" {
-							fmt.Println("Removing oldvalue", oldvalue)
+							fmt.Println("removing oldvalue", oldvalue)
 							oldvalue = ""
 						}
 
@@ -114,7 +104,7 @@ func reset() {
 	buzzer_pin.Low()
 }
 
-func notify_success() {
+func notifySuccess() {
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
 		//os.Exit(1)
