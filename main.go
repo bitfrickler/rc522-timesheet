@@ -23,7 +23,7 @@ var (
 )
 
 func log(msg string) {
-	fmt.Println(msg)
+	fmt.Fprintln("%s: %s", time.Now().String(), msg)
 
 	//TODO: Write log file
 }
@@ -39,7 +39,7 @@ func main() {
 
 	reset()
 
-	//startTicker()
+	startTicker()
 
 	var oldvalue string
 
