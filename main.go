@@ -23,7 +23,7 @@ var (
 )
 
 func log(msg string) {
-	fmt.Fprintln("%s: %s", time.Now().String(), msg)
+	fmt.Printf("%s: %s\n", time.Now().String(), msg)
 
 	//TODO: Write log file
 }
