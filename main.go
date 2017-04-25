@@ -46,19 +46,14 @@ func main() {
 	}
 	rfidChan := readerChan.GetChan()
 
-	// Wait for a SIGINT (perhaps triggered by user with CTRL-C)
-	// Run cleanup when signal is received
-	signalChan := make(chan os.Signal, 1)
-	cleanupDone := make(chan bool)
-	signal.Notify(signalChan, os.Interrupt)
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
 	go func() {
-		for _ = range signalChan {
+		for sig := range c {
 			log("received an interrupt, terminating...")
-			cleanup(services, c)
-			cleanupDone <- true
+			// TODO: cleanup
 		}
 	}()
-	<-cleanupDone
 
 	fmt.Println("waiting for card...")
 
