@@ -101,7 +101,6 @@ func transferLocal() {
 	var timeStamp string
 	var cardID string
 	var stmt *sql.Stmt
-	var res sql.Result
 
 	//db, err := sql.Open("sqlite3", "./timesheet.db")
 	//checkErr(err)
@@ -124,7 +123,7 @@ func transferLocal() {
 			stmt, err = db.Prepare("update timeentries set transferdate = '$1' where id = $2")
 			checkErr(err)
 
-			res, err = stmt.Exec(time.Now(), id)
+			_, err = stmt.Exec(time.Now(), id)
 			checkErr(err)
 		}
 
