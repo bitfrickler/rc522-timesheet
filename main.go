@@ -73,7 +73,7 @@ func main() {
 					notifyError()
 					log(err.Error())
 				} else {
-					log("committed to local database")
+					log("committed to local database: " + id)
 				}
 
 				oldvalue = id
@@ -118,7 +118,7 @@ func reset() {
 
 func notifyRegisterCard(cardID string) {
 
-	log("card id: " + cardID)
+	log("registered: " + cardID)
 
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
