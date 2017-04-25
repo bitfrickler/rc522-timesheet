@@ -101,7 +101,7 @@ func transferLocal() {
 	var timeStamp time.Time
 	var cardID string
 	var stmt *sql.Stmt
-	var res *sql.Result
+	var res sql.Result
 
 	//db, err := sql.Open("sqlite3", "./timesheet.db")
 	//checkErr(err)
@@ -111,15 +111,15 @@ func transferLocal() {
 
 	for rows.Next() {
 
-		err = rows.Scan(&id, &timeStamp, &cardID)
+		err = rows.Scan(id, timeStamp, cardID)
 		checkErr(err)
 
-		log("sending to remote server: " + *timeStamp)
+		log("sending to remote server: " + timeStamp)
 		err = saveRemote(apiKey, cardID, deviceID, timeStamp)
 		checkErr(err)
 
 		if err == nil {
-			log("sent to remote server: " + *timeStamp)
+			log("sent to remote server: " + timeStamp)
 
 			stmt, err = db.Prepare("update timeentries set transferdate = '$1' where id = $2")
 			checkErr(err)
