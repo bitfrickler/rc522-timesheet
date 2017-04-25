@@ -16,9 +16,10 @@ var (
 
 // JSONTimeEntry struct for time entry to be logged
 type JSONTimeEntry struct {
-	APIKey   string
-	CardID   string
-	DeviceID string
+	APIKey    string
+	CardID    string
+	DeviceID  string
+	TimeStamp time.Time
 }
 
 // TimeEntry struct for local time entry to be logged
@@ -86,8 +87,8 @@ func saveLocal(te TimeEntry) error {
 }
 
 // saveRemote sends a timesheet entry to the remote JSON API
-func saveRemote(apiKey string, cardID string, deviceID string) error {
-	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID}
+func saveRemote(apiKey string, cardID string, deviceID string, timeStamp time.Time) error {
+	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID, TimeStamp: timeStamp}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
 	_, err := http.Post(apiURL, "application/json;charset=utf-8", b)
@@ -96,13 +97,34 @@ func saveRemote(apiKey string, cardID string, deviceID string) error {
 }
 
 func transferLocal() {
-	db, err := sql.Open("sqlite3", "./timesheet.db")
+	var id int
+	var timeStamp time.Time
+	var cardID string
+	var stmt *Stmt
+
+	//db, err := sql.Open("sqlite3", "./timesheet.db")
 	checkErr(err)
 
-	rows, err := db.Query("select * from timeentries where transferdate is null order by date(timestamp) asc")
+	rows, err := db.Query("select id, timestamp, cardid from timeentries where transferdate is null order by date(timestamp) asc")
 	checkErr(err)
 
 	for rows.Next() {
+		err = rows.Scan(&id, &timeStamp, &cardID)
+		checkErr(err)
+
+		log("sending to remote server: " + timeStamp)
+		err = saveRemote(apiKey, cardID, deviceID, timeStamp)
+		checkerr(err)
+
+		if err == nil {
+			log("sent to remote server: " + timeStamp)
+
+			stmt, err = db.Prepare("update timeentries set transferdate = '$1' where id = $2")
+			checkErr(err)
+
+			res, err = stmt.Exec(time.Now(), id)
+			checkErr(err)
+		}
 
 	}
 

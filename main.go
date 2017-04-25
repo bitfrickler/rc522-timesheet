@@ -91,7 +91,7 @@ func main() {
 				go func() {
 					for _ = range ticker.C {
 						if oldvalue != "" {
-							fmt.Println("removing oldvalue", oldvalue)
+							fmt.Println("removing old id: ", oldvalue)
 							oldvalue = ""
 						}
 
