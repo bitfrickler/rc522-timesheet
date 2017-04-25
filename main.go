@@ -19,7 +19,7 @@ var (
 	apiKey      = "apikey123#"
 	ledPin      = rpio.Pin(16)
 	buzzerPin   = rpio.Pin(18)
-	nobuzzer    *bool
+	nobuzzer    bool
 )
 
 func log(msg string) {
