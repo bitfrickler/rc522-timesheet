@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"os"
 	"os/signal"
@@ -18,6 +19,7 @@ var (
 	apiKey      = "apikey123#"
 	ledPin      = rpio.Pin(16)
 	buzzerPin   = rpio.Pin(18)
+	nobuzzer    *bool
 )
 
 func log(msg string) {
@@ -27,6 +29,9 @@ func log(msg string) {
 }
 
 func main() {
+
+	nobuzzer = flag.Bool("nobuzzer", false, "Disable buzzer")
+	flag.Parse()
 
 	reset()
 
@@ -120,30 +125,32 @@ func notifyRegisterCard(cardID string) {
 
 	log("registered: " + cardID)
 
-	if err := rpio.Open(); err != nil {
-		fmt.Println(err)
-		//os.Exit(1)
+	if *nobuzzer {
+		if err := rpio.Open(); err != nil {
+			fmt.Println(err)
+			//os.Exit(1)
+		}
+
+		// Unmap gpio memory when done
+		defer rpio.Close()
+
+		// Set pin to output mode
+		//ledPin.Output()
+		buzzerPin.Output()
+
+		//led_pin.High()
+		buzzerPin.High()
+		//ledPin.High()
+		time.Sleep(time.Second / 20)
+		buzzerPin.Low()
+		//ledPin.Low()
+		time.Sleep(time.Second / 20)
+		buzzerPin.High()
+		//ledPin.High()
+		time.Sleep(time.Second / 20)
+		buzzerPin.Low()
+		//ledPin.Low()
 	}
-
-	// Unmap gpio memory when done
-	defer rpio.Close()
-
-	// Set pin to output mode
-	//ledPin.Output()
-	buzzerPin.Output()
-
-	//led_pin.High()
-	buzzerPin.High()
-	//ledPin.High()
-	time.Sleep(time.Second / 20)
-	buzzerPin.Low()
-	//ledPin.Low()
-	time.Sleep(time.Second / 20)
-	buzzerPin.High()
-	//ledPin.High()
-	time.Sleep(time.Second / 20)
-	buzzerPin.Low()
-	//ledPin.Low()
 }
 
 func notifyError() {
