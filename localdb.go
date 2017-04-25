@@ -10,6 +10,10 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
+var (
+	db *DB
+)
+
 // JSONTimeEntry struct for time entry to be logged
 type JSONTimeEntry struct {
 	APIKey   string
@@ -49,16 +53,25 @@ func startTicker() {
 	}()
 }
 
-func saveLocal(te TimeEntry) error {
+func openDB() {
 	db, err := sql.Open("sqlite3", "./timesheet.db")
 	checkErr(err)
+}
+
+func closeDB() {
+	db.Close()
+}
+
+func saveLocal(te TimeEntry) error {
+	//db, err := sql.Open("sqlite3", "./timesheet.db")
+	//checkErr(err)
 
 	stmt, err := db.Prepare("insert into timeentries(timestamp, cardid, deviceid) values(?,?,?)")
 	checkErr(err)
 
 	_, err = stmt.Exec(te.TimeStamp, te.CardID, te.DeviceID)
 
-	db.Close()
+	//db.Close()
 
 	return err
 }

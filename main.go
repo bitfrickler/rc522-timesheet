@@ -49,11 +49,14 @@ func main() {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
 	go func() {
-		for sig := range c {
+		for range c {
 			log("received an interrupt, terminating...")
-			// TODO: cleanup
+			cleanup()
+			os.Exit(0)
 		}
 	}()
+
+	openDB()
 
 	fmt.Println("waiting for card...")
 
@@ -94,6 +97,10 @@ func main() {
 	}
 }
 
+func cleanup() {
+	closeDB()
+}
+
 func reset() {
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
@@ -101,7 +108,7 @@ func reset() {
 
 	defer rpio.Close()
 
-	ledPin.Low()
+	//ledPin.Low()
 	buzzerPin.Low()
 }
 
@@ -115,21 +122,21 @@ func notifySuccess() {
 	defer rpio.Close()
 
 	// Set pin to output mode
-	ledPin.Output()
+	//ledPin.Output()
 	buzzerPin.Output()
 
 	//led_pin.High()
 	buzzerPin.High()
-	ledPin.High()
+	//ledPin.High()
 	time.Sleep(time.Second / 20)
 	buzzerPin.Low()
-	ledPin.Low()
+	//ledPin.Low()
 	time.Sleep(time.Second / 20)
 	buzzerPin.High()
-	ledPin.High()
+	//ledPin.High()
 	time.Sleep(time.Second / 20)
 	buzzerPin.Low()
-	ledPin.Low()
+	//ledPin.Low()
 }
 
 func notifyError() {
