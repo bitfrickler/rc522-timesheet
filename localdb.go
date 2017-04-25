@@ -98,7 +98,7 @@ func saveRemote(apiKey string, cardID string, deviceID string, timeStamp time.Ti
 
 func transferLocal() {
 	var id int
-	var timeStamp time.Time
+	var timeStamp string
 	var cardID string
 	var stmt *sql.Stmt
 	var res sql.Result
