@@ -116,7 +116,7 @@ func reset() {
 	buzzerPin.Low()
 }
 
-func notifySuccess(cardID string) {
+func notifyRegisterCard(cardID string) {
 
 	log("card id: " + cardID)
 
