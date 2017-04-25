@@ -50,9 +50,9 @@ func main() {
 	signal.Notify(c, os.Interrupt)
 	go func() {
 		for range c {
-			log("received an interrupt, terminating...")
+			log("received an interrupt")
 			cleanup()
-			os.Exit(0)
+			exit()
 		}
 	}()
 
@@ -95,6 +95,11 @@ func main() {
 			}
 		}
 	}
+}
+
+func exit() {
+	log("exiting")
+	os.Exit(0)
 }
 
 func cleanup() {

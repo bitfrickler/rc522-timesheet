@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	db *DB
+	db = *sql.DB
 )
 
 // JSONTimeEntry struct for time entry to be logged
@@ -54,12 +54,22 @@ func startTicker() {
 }
 
 func openDB() {
-	db, err := sql.Open("sqlite3", "./timesheet.db")
-	checkErr(err)
+	log("opening database...")
+	var err error
+	db, err = sql.Open("sqlite3", "./timesheet.db")
+	//checkErr(err)
+	if(err == nil) {
+		log("database open")
+	}
+	else {
+		log("error opening database")
+	}
 }
 
 func closeDB() {
+	log("closing database")
 	db.Close()
+	log("database closed")
 }
 
 func saveLocal(te TimeEntry) error {
