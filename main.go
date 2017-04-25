@@ -19,7 +19,7 @@ var (
 	apiKey      = "apikey123#"
 	ledPin      = rpio.Pin(16)
 	buzzerPin   = rpio.Pin(18)
-	nobuzzer    bool
+	nobuzzer    *bool
 )
 
 func log(msg string) {
@@ -33,7 +33,7 @@ func main() {
 	nobuzzer = flag.Bool("nobuzzer", false, "Disable buzzer")
 	flag.Parse()
 
-	if nobuzzer {
+	if &nobuzzer {
 		log("BUZZER DISABLED")
 	}
 
@@ -129,7 +129,7 @@ func notifyRegisterCard(cardID string) {
 
 	log("registered: " + cardID)
 
-	if nobuzzer == false {
+	if &nobuzzer == false {
 		if err := rpio.Open(); err != nil {
 			fmt.Println(err)
 			//os.Exit(1)
