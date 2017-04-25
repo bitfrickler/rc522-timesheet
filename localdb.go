@@ -19,7 +19,7 @@ type JSONTimeEntry struct {
 	APIKey    string
 	CardID    string
 	DeviceID  string
-	TimeStamp time.Time
+	TimeStamp string
 }
 
 // TimeEntry struct for local time entry to be logged
