@@ -33,6 +33,10 @@ func main() {
 	nobuzzer = flag.Bool("nobuzzer", false, "Disable buzzer")
 	flag.Parse()
 
+	if *nobuzzer {
+		log("BUZZER DISABLED")
+	}
+
 	reset()
 
 	//startTicker()
