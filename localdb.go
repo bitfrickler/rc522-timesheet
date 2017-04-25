@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	db = *sql.DB
+	db *sql.DB
 )
 
 // JSONTimeEntry struct for time entry to be logged
@@ -58,10 +58,9 @@ func openDB() {
 	var err error
 	db, err = sql.Open("sqlite3", "./timesheet.db")
 	//checkErr(err)
-	if(err == nil) {
+	if err == nil {
 		log("database open")
-	}
-	else {
+	} else {
 		log("error opening database")
 	}
 }

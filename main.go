@@ -30,7 +30,7 @@ func main() {
 
 	reset()
 
-	startTicker()
+	//startTicker()
 
 	var oldvalue string
 
@@ -64,7 +64,7 @@ func main() {
 		select {
 		case id := <-rfidChan:
 			if id != oldvalue {
-				log("card id: " + id)
+				notifyRegisterCard(id)
 
 				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: deviceID}
 				err := saveLocal(te)
@@ -73,7 +73,6 @@ func main() {
 					notifyError()
 					log(err.Error())
 				} else {
-					notifySuccess()
 					log("committed to local database")
 				}
 
@@ -117,7 +116,10 @@ func reset() {
 	buzzerPin.Low()
 }
 
-func notifySuccess() {
+func notifySuccess(cardID string) {
+
+	log("card id: " + cardID)
+
 	if err := rpio.Open(); err != nil {
 		fmt.Println(err)
 		//os.Exit(1)
