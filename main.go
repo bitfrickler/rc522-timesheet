@@ -13,14 +13,14 @@ import (
 )
 
 var (
-	DeviceID, _ = os.Hostname()
-	APIURL      = "http://10.0.26.106:8000/api/Time"
-	APIKey      = "apikey123#"
-	led_pin     = rpio.Pin(16)
-	buzzer_pin  = rpio.Pin(18)
+	deviceID, _ = os.Hostname()
+	apiURL      = "http://10.0.26.106:8000/api/Time"
+	apiKey      = "apikey123#"
+	ledPin      = rpio.Pin(16)
+	buzzerPin   = rpio.Pin(18)
 )
 
-func Log(msg string) {
+func log(msg string) {
 	fmt.Println(msg)
 
 	//TODO: Write log file
@@ -38,7 +38,7 @@ func main() {
 
 	reset()
 
-	StartTicker()
+	startTicker()
 
 	var oldvalue string
 
@@ -60,17 +60,17 @@ func main() {
 		select {
 		case id := <-rfidChan:
 			if id != oldvalue {
-				Log("card id: " + id)
+				log("card id: " + id)
 
-				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: DeviceID}
+				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: deviceID}
 				err := saveLocal(te)
 
 				if err != nil {
 					notifyError()
-					Log(err.Error())
+					log(err.Error())
 				} else {
 					notifySuccess()
-					Log("committed to local database")
+					log("committed to local database")
 				}
 
 				oldvalue = id
@@ -100,8 +100,8 @@ func reset() {
 
 	defer rpio.Close()
 
-	led_pin.Low()
-	buzzer_pin.Low()
+	ledPin.Low()
+	buzzerPin.Low()
 }
 
 func notifySuccess() {
@@ -114,21 +114,21 @@ func notifySuccess() {
 	defer rpio.Close()
 
 	// Set pin to output mode
-	led_pin.Output()
-	buzzer_pin.Output()
+	ledPin.Output()
+	buzzerPin.Output()
 
 	//led_pin.High()
-	buzzer_pin.High()
-	led_pin.High()
+	buzzerPin.High()
+	ledPin.High()
 	time.Sleep(time.Second / 20)
-	buzzer_pin.Low()
-	led_pin.Low()
+	buzzerPin.Low()
+	ledPin.Low()
 	time.Sleep(time.Second / 20)
-	buzzer_pin.High()
-	led_pin.High()
+	buzzerPin.High()
+	ledPin.High()
 	time.Sleep(time.Second / 20)
-	buzzer_pin.Low()
-	led_pin.Low()
+	buzzerPin.Low()
+	ledPin.Low()
 }
 
 func notifyError() {

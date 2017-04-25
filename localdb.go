@@ -39,12 +39,12 @@ type TimeEntry struct {
 // 	SaveLocal(te)
 // }
 
-// StartTicker starts the ticker for recurring data export to the remote JSON API
-func StartTicker() {
+// startTicker starts the ticker for recurring data export to the remote JSON API
+func startTicker() {
 	ticker := time.NewTicker(time.Second * 60)
 	go func() {
 		for _ = range ticker.C {
-			Log("exporting to remote API")
+			log("exporting to remote API")
 		}
 	}()
 }
@@ -63,12 +63,12 @@ func saveLocal(te TimeEntry) error {
 	return err
 }
 
-// SaveRemote sends a timesheet entry to the remote JSON API
-func SaveRemote(apiKey string, cardID string, deviceID string) error {
+// saveRemote sends a timesheet entry to the remote JSON API
+func saveRemote(apiKey string, cardID string, deviceID string) error {
 	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
-	_, err := http.Post(APIURL, "application/json;charset=utf-8", b)
+	_, err := http.Post(apiURL, "application/json;charset=utf-8", b)
 
 	return err
 }
