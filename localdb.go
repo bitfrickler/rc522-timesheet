@@ -109,6 +109,7 @@ func transferLocal() {
 	checkErr(err)
 
 	for rows.Next() {
+
 		err = rows.Scan(&id, &timeStamp, &cardID)
 		checkErr(err)
 
