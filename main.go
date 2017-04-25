@@ -129,7 +129,7 @@ func notifyRegisterCard(cardID string) {
 
 	log("registered: " + cardID)
 
-	if !nobuzzer {
+	if nobuzzer == false {
 		if err := rpio.Open(); err != nil {
 			fmt.Println(err)
 			//os.Exit(1)
