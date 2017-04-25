@@ -33,7 +33,7 @@ func main() {
 	nobuzzer = flag.Bool("nobuzzer", false, "Disable buzzer")
 	flag.Parse()
 
-	if *nobuzzer {
+	if nobuzzer {
 		log("BUZZER DISABLED")
 	}
 
@@ -129,7 +129,7 @@ func notifyRegisterCard(cardID string) {
 
 	log("registered: " + cardID)
 
-	if *nobuzzer {
+	if nobuzzer {
 		if err := rpio.Open(); err != nil {
 			fmt.Println(err)
 			//os.Exit(1)
