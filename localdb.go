@@ -121,7 +121,7 @@ func transferLocal() {
 		if err == nil {
 			log("sent to remote server: " + timeStamp)
 
-			stmt, err = db.Prepare("update timeentries set transferdate = '$1' where id = $2")
+			stmt, err = db.Prepare("update timeentries set transferdate = ? where id = ?")
 			checkErr(err)
 
 			_, err = stmt.Exec(time.Now(), id)
