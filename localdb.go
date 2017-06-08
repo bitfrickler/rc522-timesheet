@@ -104,6 +104,8 @@ func transferLocal() {
 	var stmt *sql.Stmt
 
 	var err error
+	var mydb *sql.DB
+
 	mydb, err = sql.Open("sqlite3", "./timesheet.db")
 	checkErr(err)
 
