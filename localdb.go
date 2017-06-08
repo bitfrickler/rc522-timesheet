@@ -50,6 +50,7 @@ func startTicker() {
 	go func() {
 		for _ = range ticker.C {
 			log("exporting to remote API")
+			transferLocal()
 		}
 	}()
 }
