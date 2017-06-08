@@ -111,7 +111,7 @@ func transferLocal() {
 
 	for rows.Next() {
 
-		err = rows.Scan(id, timeStamp, cardID)
+		err = rows.Scan(&id, &timeStamp, &cardID)
 		checkErr(err)
 
 		log("sending to remote server: " + timeStamp)
