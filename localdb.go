@@ -135,7 +135,7 @@ func transferLocal() {
 
 	rows.Close()
 
-	mydb.close()
+	mydb.Close()
 }
 
 func checkErr(err error) {
