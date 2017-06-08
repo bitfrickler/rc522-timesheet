@@ -103,10 +103,11 @@ func transferLocal() {
 	var cardID string
 	var stmt *sql.Stmt
 
-	//db, err := sql.Open("sqlite3", "./timesheet.db")
-	//checkErr(err)
+	var err error
+	mydb, err = sql.Open("sqlite3", "./timesheet.db")
+	checkErr(err)
 
-	rows, err := db.Query("select id, timestamp, cardid from timeentries where transferdate is null order by date(timestamp) asc")
+	rows, err := mydb.Query("select id, timestamp, cardid from timeentries where transferdate is null order by date(timestamp) asc")
 	checkErr(err)
 
 	for rows.Next() {
@@ -121,7 +122,7 @@ func transferLocal() {
 		if err == nil {
 			log("sent to remote server: " + timeStamp)
 
-			stmt, err = db.Prepare("update timeentries set transferdate = ? where id = ?")
+			stmt, err = mydb.Prepare("update timeentries set transferdate = ? where id = ?")
 			checkErr(err)
 
 			_, err = stmt.Exec(time.Now(), id)
@@ -131,6 +132,8 @@ func transferLocal() {
 	}
 
 	rows.Close()
+
+	mydb.close()
 }
 
 func checkErr(err error) {
