@@ -67,7 +67,7 @@ func main() {
 
 	openDB()
 
-	fmt.Println("waiting for card...")
+	log("waiting for card...")
 
 	for {
 		select {
