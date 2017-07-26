@@ -89,7 +89,7 @@ func saveLocal(te TimeEntry) error {
 
 // saveRemote sends a timesheet entry to the remote JSON API
 func saveRemote(apiKey string, cardSerial string, cardReaderId string, timestamp string) error {
-	j := JSONTimeEntry{APIKey: apiKey, CardSerial: cardID, CardReaderId: deviceID, Timestamp: timestamp}
+	j := JSONTimeEntry{APIKey: apiKey, CardSerial: cardSerial, CardReaderId: cardReaderId, Timestamp: timestamp}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
 	_, err := http.Post(apiURL, "application/json;charset=utf-8", b)
