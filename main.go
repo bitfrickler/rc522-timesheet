@@ -16,7 +16,7 @@ import (
 var (
 	deviceID, _ = os.Hostname()
 	apiURL      = "http://10.0.26.106:8000/api/Time"
-	apiKey      = "apikey123#"
+	apiKey      = "myApIKey"
 	ledPin      = rpio.Pin(16)
 	buzzerPin   = rpio.Pin(18)
 	nobuzzer    *bool

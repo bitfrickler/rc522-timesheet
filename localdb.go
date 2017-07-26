@@ -16,10 +16,10 @@ var (
 
 // JSONTimeEntry struct for time entry to be logged
 type JSONTimeEntry struct {
-	APIKey    string
-	CardID    string
-	DeviceID  string
-	TimeStamp string
+	APIKey       string
+	CardSerial   string
+	CardReaderId string
+	Timestamp    string
 }
 
 // TimeEntry struct for local time entry to be logged
@@ -88,8 +88,8 @@ func saveLocal(te TimeEntry) error {
 }
 
 // saveRemote sends a timesheet entry to the remote JSON API
-func saveRemote(apiKey string, cardID string, deviceID string, timeStamp string) error {
-	j := JSONTimeEntry{APIKey: apiKey, CardID: cardID, DeviceID: deviceID, TimeStamp: timeStamp}
+func saveRemote(apiKey string, cardSerial string, cardReaderId string, timestamp string) error {
+	j := JSONTimeEntry{APIKey: apiKey, CardSerial: cardID, CardReaderId: deviceID, Timestamp: timestamp}
 	b := new(bytes.Buffer)
 	json.NewEncoder(b).Encode(j)
 	_, err := http.Post(apiURL, "application/json;charset=utf-8", b)
