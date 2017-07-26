@@ -15,7 +15,7 @@ import (
 
 var (
 	deviceID, _ = os.Hostname()
-	apiURL      = "http://10.0.26.106/LazyTimesheet/Timesheet/All"
+	apiURL      = "http://10.0.26.106/LazyTimesheet/Timesheet/Post"
 	apiKey      = "myApIKey"
 	ledPin      = rpio.Pin(16)
 	buzzerPin   = rpio.Pin(18)
