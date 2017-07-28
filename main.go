@@ -14,6 +14,7 @@ import (
 )
 
 var (
+	ticker      *Ticker
 	deviceID, _ = os.Hostname()
 	apiURL      = "http://10.0.32.205/LazyTimesheet/TimeRecords/Post"
 	apiKey      = "myApIKey"
