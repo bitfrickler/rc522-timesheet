@@ -39,7 +39,7 @@ func main() {
 
 	reset()
 
-	startTicker()
+	//startTicker()
 
 	var oldvalue string
 
@@ -76,7 +76,7 @@ func main() {
 				notifyRegisterCard(id)
 
 				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: deviceID}
-				err := saveLocal(te)
+				//err := saveLocal(te)
 
 				if err != nil {
 					notifyError()
