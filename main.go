@@ -75,7 +75,7 @@ func main() {
 			if id != oldvalue {
 				notifyRegisterCard(id)
 
-				te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: deviceID}
+				//te := TimeEntry{TimeStamp: time.Now(), CardID: id, DeviceID: deviceID}
 				//err := saveLocal(te)
 
 				if err != nil {
