@@ -93,7 +93,7 @@ func main() {
 					ticker.Stop()
 				}
 
-				ticker := time.NewTicker(time.Second * 10)
+				ticker := time.NewTicker(time.Second * 3)
 				go func() {
 					for _ = range ticker.C {
 						if oldvalue != "" {
