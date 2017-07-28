@@ -14,7 +14,6 @@ import (
 )
 
 var (
-	ticker      *time.Ticker
 	deviceID, _ = os.Hostname()
 	apiURL      = "http://10.0.32.205/LazyTimesheet/TimeRecords/Post"
 	apiKey      = "myApIKey"
@@ -88,24 +87,28 @@ func main() {
 
 				oldvalue = id
 
-				if ticker != nil {
-					log("stopping previous ticker")
-					ticker.Stop()
-				}
+				// if ticker != nil {
+				// 	log("stopping previous ticker")
+				// 	ticker.Stop()
+				// }
 
-				ticker := time.NewTicker(time.Second * 3)
-				go func() {
-					for _ = range ticker.C {
-						if oldvalue != "" {
-							fmt.Println("old id removed: ", oldvalue)
-							oldvalue = ""
-						}
+				// ticker := time.NewTicker(time.Second * 3)
+				// go func() {
+				// 	for _ = range ticker.C {
 
-						ticker.Stop()
-					}
-				}()
+				// 		if oldvalue != "" {
 
-				time.Sleep(500 * time.Millisecond)
+				// 			fmt.Println("old id removed: ", oldvalue)
+				// 			oldvalue = ""
+				// 		}
+
+				// 		ticker.Stop()
+				// 	}
+				// }()
+
+				time.Sleep(2000 * time.Millisecond)
+
+				oldvalue = ""
 			}
 		}
 	}
