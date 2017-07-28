@@ -92,23 +92,21 @@ func main() {
 				// 	ticker.Stop()
 				// }
 
-				// ticker := time.NewTicker(time.Second * 3)
-				// go func() {
-				// 	for _ = range ticker.C {
+				ticker := time.NewTicker(time.Second * 3)
+				go func() {
+					for _ = range ticker.C {
 
-				// 		if oldvalue != "" {
+						if oldvalue != "" {
 
-				// 			fmt.Println("old id removed: ", oldvalue)
-				// 			oldvalue = ""
-				// 		}
+							fmt.Println("old id removed: ", oldvalue)
+							oldvalue = ""
+						}
 
-				// 		ticker.Stop()
-				// 	}
-				// }()
+						ticker.Stop()
+					}
+				}()
 
-				time.Sleep(2000 * time.Millisecond)
-
-				oldvalue = ""
+				time.Sleep(500 * time.Millisecond)
 			}
 		}
 	}
