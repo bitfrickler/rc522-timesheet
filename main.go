@@ -87,6 +87,11 @@ func main() {
 
 				oldvalue = id
 
+				if ticker != nil {
+					log("stopping previous ticker")
+					ticker.Stop()
+				}
+
 				ticker := time.NewTicker(time.Second * 10)
 				go func() {
 					for _ = range ticker.C {
